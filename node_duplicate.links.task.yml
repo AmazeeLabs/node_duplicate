@@ -1,0 +1,5 @@
+node_duplicate.duplicate:
+  route_name: node_duplicate.duplicate
+  title: 'Duplicate'
+  base_route: entity.node.canonical
+  weight: 100
