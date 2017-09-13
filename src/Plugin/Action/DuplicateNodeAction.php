@@ -2,7 +2,6 @@
 
 namespace Drupal\node_duplicate\Plugin\Action;
 
-
 use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TypedData\TranslatableInterface;
@@ -37,17 +36,29 @@ class DuplicateNodeAction extends ActionBase {
         foreach ($duplicated_entity->getTranslationLanguages() as $language) {
           $langcode = $language->getId();
           $duplicated_entity = $duplicated_entity->getTranslation($langcode);
+
           $new_label = $this->t('Clone of @label', [
             '@label' => FilteredMarkup::create($duplicated_entity->label()),
           ], [
             'langcode' => $langcode,
           ]);
           $duplicated_entity->set($label_key, $new_label);
+
+          $admin_title_key = 'field_admin_title';
+          if ($duplicated_entity->hasField($admin_title_key)) {
+            $new_admin_title = $this->t('Clone of @label', [
+              '@label' => FilteredMarkup::create($duplicated_entity->get($admin_title_key)->value),
+            ], [
+              'langcode' => $langcode,
+            ]);
+            $duplicated_entity->set($admin_title_key, $new_admin_title);
+          }
         }
       }
     }
 
-    $duplicated_entity->status = NODE_NOT_PUBLISHED;
+    $duplicated_entity->setPublished(FALSE);
+    $duplicated_entity->setChangedTime(time());
     $duplicated_entity->save();
     return $duplicated_entity;
   }
@@ -59,4 +70,5 @@ class DuplicateNodeAction extends ActionBase {
     /** @var \Drupal\node\NodeInterface $object */
     return $object->access('update', $account, $return_as_object);
   }
+
 }
