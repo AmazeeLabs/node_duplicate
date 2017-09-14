@@ -46,12 +46,15 @@ class DuplicateNodeAction extends ActionBase {
 
           $admin_title_key = 'field_admin_title';
           if ($duplicated_entity->hasField($admin_title_key)) {
-            $new_admin_title = $this->t('Clone of @label', [
-              '@label' => FilteredMarkup::create($duplicated_entity->get($admin_title_key)->value),
-            ], [
-              'langcode' => $langcode,
-            ]);
-            $duplicated_entity->set($admin_title_key, $new_admin_title);
+            $current_title = $duplicated_entity->get($admin_title_key)->value;
+            if (!empty($current_title)) {
+              $new_admin_title = $this->t('Clone of @label', [
+                '@label' => FilteredMarkup::create($current_title),
+              ], [
+                'langcode' => $langcode,
+              ]);
+              $duplicated_entity->set($admin_title_key, $new_admin_title);
+            }
           }
         }
       }
