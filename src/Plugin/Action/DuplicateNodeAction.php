@@ -60,10 +60,29 @@ class DuplicateNodeAction extends ActionBase {
       }
     }
 
+    $this->cloneEntities($duplicated_entity);
+
     $duplicated_entity->setPublished(FALSE);
     $duplicated_entity->setChangedTime(time());
     $duplicated_entity->save();
     return $duplicated_entity;
+  }
+
+  /**
+   * Clone all entities.
+   *
+   * @param \Drupal\node\NodeInterface $entity
+   *   Node to duplicate.
+   */
+  protected function cloneEntities($entity) {
+    foreach ($entity as $field) {
+      if ($field instanceof \Drupal\entity_reference_revisions\EntityReferenceRevisionsFieldItemList) {
+        foreach ($field as $field_item) {
+          $field_item->entity = $field_item->entity->createDuplicate();
+          $this->cloneEntities($field_item->entity);
+        }
+      }
+    }
   }
 
   /**
