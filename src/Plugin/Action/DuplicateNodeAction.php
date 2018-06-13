@@ -88,7 +88,16 @@ class DuplicateNodeAction extends ActionBase {
 
     $duplicated_entity->setPublished(FALSE);
     $duplicated_entity->setChangedTime(time());
-    $duplicated_entity->save();
+    if ($entity->hasField('path')) {
+      $duplicated_entity->path = [
+        'alias' => null,
+        'pathauto' => false,
+      ];
+      $duplicated_entity->save();
+      \Drupal\Core\Cache\Cache::invalidateTags($duplicated_entity->getCacheTags());
+      pathauto_entity_insert($duplicated_entity);
+    }
+
     return $duplicated_entity;
   }
 
