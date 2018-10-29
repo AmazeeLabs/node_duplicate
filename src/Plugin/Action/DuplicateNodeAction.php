@@ -150,6 +150,14 @@ class DuplicateNodeAction extends ActionBase {
       pathauto_entity_insert($duplicated_entity);
     }
 
+    $is_template_field = 'intprocess_is_template';
+    if ($duplicated_entity->hasField($is_template_field)) {
+      $duplicated_entity->set($is_template_field, FALSE);
+    }
+
+    $duplicated_entity->setOwnerId(\Drupal::currentUser()->id());
+    $duplicated_entity->save();
+
     return $duplicated_entity;
   }
 
