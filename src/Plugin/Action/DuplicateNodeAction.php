@@ -47,7 +47,7 @@ class DuplicateNodeAction extends ActionBase {
       }
     }
 
-    $duplicated_entity->status = NODE_NOT_PUBLISHED;
+    $duplicated_entity->status = Drupal\node\NodeInterface::NOT_PUBLISHED;
     $duplicated_entity->save();
     return $duplicated_entity;
   }
