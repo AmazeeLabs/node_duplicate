@@ -31,6 +31,16 @@ class NodeDuplicateConfirmForm extends ConfirmFormBase {
     return $this->getQuestion();
   }
 
+  public function getRedirectUrl() {
+    $query = \Drupal::request()->query;
+    if ($query->has('destination')) {
+      $options = UrlHelper::parse($query->get('destination'));
+      return Url::fromUri('internal:/' . $options['path'], $options);
+     } else {
+      return Url::fromRoute('system.admin_content');
+    }
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -69,6 +79,7 @@ class NodeDuplicateConfirmForm extends ConfirmFormBase {
       '@url' => $duplicated_node->toUrl('edit-form')->toString(),
       '@label' => $duplicated_node->label(),
     ]));
+    $form_state->setRedirectUrl($this->getRedirectUrl());
   }
 
 }
