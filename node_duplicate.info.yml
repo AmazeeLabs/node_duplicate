@@ -2,4 +2,5 @@ name: Node duplicate
 type: module
 description: Exposes an action for duplicating nodes.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: Other
