@@ -7,6 +7,7 @@ use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\filter\Render\FilteredMarkup;
+use Drupal\node\NodeInterface;
 
 /**
  * Duplicates a node.
@@ -47,7 +48,7 @@ class DuplicateNodeAction extends ActionBase {
       }
     }
 
-    $duplicated_entity->status = NODE_NOT_PUBLISHED;
+    $duplicated_entity->status = NodeInterface::NOT_PUBLISHED;
     $duplicated_entity->save();
     return $duplicated_entity;
   }
