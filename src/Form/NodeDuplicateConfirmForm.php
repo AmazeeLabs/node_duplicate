@@ -64,7 +64,7 @@ class NodeDuplicateConfirmForm extends ConfirmFormBase {
     /** @var \Drupal\node\Entity\Node $node */
     $node = \Drupal::request()->get('node');
     $duplicated_node = $action->execute($node);
-    \Drupal\Core\Messenger\MessengerInterface::addMessage($this->t('@bundle <a href="@url" target="_blank">@label</a> has been duplicated.', [
+    \Drupal::messenger()->addMessage($this->t('@bundle <a href="@url" target="_blank">@label</a> has been duplicated.', [
       '@bundle' => node_get_type_label($duplicated_node),
       '@url' => $duplicated_node->toUrl('edit-form')->toString(),
       '@label' => $duplicated_node->label(),
